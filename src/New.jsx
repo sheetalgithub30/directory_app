@@ -7,8 +7,9 @@ function New() {
   const [aadhar, setAadhar] = useState("");
   const [mobile, setMobile] = useState("");
   const [age, setAge] = useState("");
-
   const [data, setData] = useState([]);
+
+   
   
 
   function handle(e){
@@ -19,6 +20,19 @@ function New() {
   }
 
   function save() {
+    console.log(name,dob,aadhar,mobile)
+    if(name=="" ||dob=="" || aadhar=="" || mobile=="" ){
+        alert("All Fields are mandatory");
+        return;
+    }
+    if(aadhar.length !=12){
+        alert("Not a valid Aadhar");
+        return; 
+    }
+    if(mobile.length !=10){
+        alert("Not a valid Mobile Number");
+        return; 
+    }
     let obj = {};
     obj.name = name;
     obj.dob = dob;
@@ -27,6 +41,11 @@ function New() {
     obj.age = age;
     setData([...data, obj]);
     setFill(false);
+     setName("");
+     setDob("");
+     setAadhar("");
+     setMobile("");
+     setAge("");
   }
 
   function del(index){
@@ -38,7 +57,7 @@ function New() {
 
   return (
     <div className="mx-11 border-2 border-black p-2">
-      <span className="border-2 border-black p-1 ">Add New Person</span>
+      <span className="border-2 border-black py-1 px-9 ">Add New Person</span>
       <div className="mt-5 mx-2 relative h-[67vh]">
         <table className="w-full border-collapse ">
           <tr className="bg-blue-900 text-white">
@@ -70,6 +89,7 @@ function New() {
                 <tr className="p-1 ">
                   <td>
                     <input
+                    required
                       type="text"
                       placeholder="Name"
                       value={name}
