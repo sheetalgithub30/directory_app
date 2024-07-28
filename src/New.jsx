@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 function New() {
   const [fill, setFill] = useState(false);
@@ -9,30 +9,31 @@ function New() {
   const [age, setAge] = useState("");
   const [data, setData] = useState([]);
 
-   
-  
 
-  function handle(e){
+  useEffect(() => {
+    if (data.length > 0)
+      localStorage.setItem("user", JSON.stringify(data));
+    else
+    localStorage.removeItem("user")
+  }, [data]);
+
+  useEffect(() => {
+    if (localStorage.getItem("user")) {
+      let array = JSON.parse(localStorage.getItem("user"));
+      setData(array);
+    }
+  }, []);
+
+
+  function handle(e) {
     setDob(e.currentTarget.value);
-    let age = Number(2024) - Number((e.currentTarget.value).split("-")[0]);
-    console.log(dob)
-    setAge(age)
+    let age = Number(2024) - Number(e.currentTarget.value.split("-")[0]);
+    console.log(dob);
+    setAge(age);
   }
 
-  function save() {
-    console.log(name,dob,aadhar,mobile)
-    if(name=="" ||dob=="" || aadhar=="" || mobile=="" ){
-        alert("All Fields are mandatory");
-        return;
-    }
-    if(aadhar.length !=12){
-        alert("Not a valid Aadhar");
-        return; 
-    }
-    if(mobile.length !=10){
-        alert("Not a valid Mobile Number");
-        return; 
-    }
+  function save(e) {
+    e.preventDefault();
     let obj = {};
     obj.name = name;
     obj.dob = dob;
@@ -41,18 +42,21 @@ function New() {
     obj.age = age;
     setData([...data, obj]);
     setFill(false);
-     setName("");
-     setDob("");
-     setAadhar("");
-     setMobile("");
-     setAge("");
+    setName("");
+    setDob("");
+    setAadhar("");
+    setMobile("");
+    setAge("");
+    console.log(data)
   }
 
-  function del(index){
-   let new_arr = [...data];
-   setData(new_arr.filter((e,ind)=>{
-    return ind!== index;
-   }));
+  function del(index) {
+    let new_arr = [...data];
+    setData(
+      new_arr.filter((e, ind) => {
+        return ind !== index;
+      })
+    );
   }
 
   return (
@@ -70,65 +74,73 @@ function New() {
           </tr>
 
           {data &&
-            data.map((e,index) => {
-             return <tr>
-                <td>{e.name}</td>
-                <td>{e.dob}</td>
-                <td>{e.aadhar}</td>
-                <td>{e.mobile}</td>
-                <td>{e.age}</td>
-                <td><button onClick={()=>del(index)}>Delete</button></td>
-              </tr>;
+            data.map((e, index) => {
+              return (
+                <tr>
+                  <td>{e.name}</td>
+                  <td>{e.dob}</td>
+                  <td>{e.aadhar}</td>
+                  <td>{e.mobile}</td>
+                  <td>{e.age}</td>
+                  <td>
+                    <button onClick={() => del(index)}>Delete</button>
+                  </td>
+                </tr>
+              );
             })}
         </table>
         {fill ? (
           <div className="mt-5 p-2 bg-blue-900">
             <h2 className="text-center">Fill below form for New Entry</h2>
             <div className="flex justify-around items-center">
-              <table id="info" className="w-full border-collapse">
-                <tr className="p-1 ">
-                  <td>
-                    <input
-                    required
-                      type="text"
-                      placeholder="Name"
-                      value={name}
-                      onChange={(e) => setName(e.currentTarget.value)}
-                    ></input>
-                  </td>
-                  <td>
-                    <input
-                      type="date"
-                      value={dob}
-                      onChange={(e) =>{
-                        handle(e)}}
-                    ></input>
-                  </td>
-                  <td>
-                    <input
-                      type="number"
-                      placeholder="Aadhar Number"
-                      value={aadhar}
-                      onChange={(e) => setAadhar(e.currentTarget.value)}
-                    ></input>
-                  </td>
-                  <td>
-                    <input
-                      type="number"
-                      placeholder="Mobile Number"
-                      value={mobile}
-                      onChange={(e) => setMobile(e.currentTarget.value)}
-                    ></input>
-                  </td>
-                  <td>
-                    <input type="number" placeholder="Age" value={age}
-                    disabled></input>
-                  </td>
-                  <td>
-                    <button onClick={save}>Save</button>
-                  </td>
-                </tr>
-              </table>
+              <form onSubmit={save}>
+                <input
+                  type="text"
+                  placeholder="Name"
+                  value={name}
+                  onChange={(e) => setName(e.currentTarget.value)}
+                  required
+                ></input>
+
+                <input
+                  type="date"
+                  value={dob}
+                  onChange={(e) => {
+                    handle(e);
+                  }}
+                  // required
+                ></input>
+
+                <input
+                  type="number"
+                  placeholder="Aadhar Number"
+                  value={aadhar}
+                  onChange={(e) => setAadhar(e.currentTarget.value)}
+                  min="100000000000"
+                  max="999999999999"
+                  // required
+                ></input>
+
+                <input
+                  type="number"
+                  placeholder="Mobile Number"
+                  value={mobile}
+                  onChange={(e) => setMobile(e.currentTarget.value)}
+                  min="1000000000"
+                  max="9999999999"
+                  // required
+                ></input>
+
+                <input
+                  type="number"
+                  placeholder="Age"
+                  value={age}
+                  disabled
+                ></input>
+
+                <button type="submit"  placeholder="submit">Submit</button>
+                {/* <button >submit</button> */}
+              </form>
             </div>
           </div>
         ) : (
