@@ -7,14 +7,12 @@
     text-align: left;
     padding: 5px;
   }
-  #info td{
-    padding: 1px;
-  }
-  #info input{
-    width: 100%;
-  }
-@media screen and (max-width:727px) {
-    #info input{
-        width: 6rem;
-    }
+#new{
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+}
+#new input{
+  margin: 4px;
+  width: 18%;
 }

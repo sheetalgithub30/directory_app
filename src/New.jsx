@@ -9,20 +9,24 @@ function New() {
   const [age, setAge] = useState("");
   const [data, setData] = useState([]);
 
-
-  useEffect(() => {
-    if (data.length > 0)
-      localStorage.setItem("user", JSON.stringify(data));
-    else
-    localStorage.removeItem("user")
-  }, [data]);
-
   useEffect(() => {
     if (localStorage.getItem("user")) {
       let array = JSON.parse(localStorage.getItem("user"));
       setData(array);
     }
   }, []);
+
+
+  useEffect(() => {
+    if (data.length > 0)
+    { localStorage.setItem("user", JSON.stringify(data));
+    }
+    else{
+    localStorage.removeItem("user");
+    }
+  }, [data]);
+
+
 
 
   function handle(e) {
@@ -57,6 +61,7 @@ function New() {
         return ind !== index;
       })
     );
+   
   }
 
   return (
@@ -76,24 +81,24 @@ function New() {
           {data &&
             data.map((e, index) => {
               return (
-                <tr>
+                <tr key={index}>
                   <td>{e.name}</td>
                   <td>{e.dob}</td>
                   <td>{e.aadhar}</td>
                   <td>{e.mobile}</td>
                   <td>{e.age}</td>
                   <td>
-                    <button onClick={() => del(index)}>Delete</button>
+                    <button onClick={() => del(index)}><u className="text-red-700">Delete</u></button>
                   </td>
                 </tr>
               );
             })}
         </table>
         {fill ? (
-          <div className="mt-5 p-2 bg-blue-900">
-            <h2 className="text-center">Fill below form for New Entry</h2>
+          <div className="mt-5 p-2 bg-blue-900 border-2 border-black">
+            <h2 className="text-center text-white my-2">Fill below form for New Entry</h2>
             <div className="flex justify-around items-center">
-              <form onSubmit={save}>
+              <form onSubmit={save} id="new">
                 <input
                   type="text"
                   placeholder="Name"
@@ -108,7 +113,7 @@ function New() {
                   onChange={(e) => {
                     handle(e);
                   }}
-                  // required
+                  required
                 ></input>
 
                 <input
@@ -118,7 +123,7 @@ function New() {
                   onChange={(e) => setAadhar(e.currentTarget.value)}
                   min="100000000000"
                   max="999999999999"
-                  // required
+                  required
                 ></input>
 
                 <input
@@ -128,7 +133,7 @@ function New() {
                   onChange={(e) => setMobile(e.currentTarget.value)}
                   min="1000000000"
                   max="9999999999"
-                  // required
+                  required
                 ></input>
 
                 <input
@@ -138,8 +143,7 @@ function New() {
                   disabled
                 ></input>
 
-                <button type="submit"  placeholder="submit">Submit</button>
-                {/* <button >submit</button> */}
+                <button type="submit"  placeholder="submit"><u className="text-green-400">Submit</u></button>
               </form>
             </div>
           </div>
