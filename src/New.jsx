@@ -51,7 +51,6 @@ function New() {
     setAadhar("");
     setMobile("");
     setAge("");
-    console.log(data)
   }
 
   function del(index) {

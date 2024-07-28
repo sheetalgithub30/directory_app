@@ -21,7 +21,6 @@ function Retrieve() {
       return e.aadhar == aadhar;
      }))
 
-     console.log(data)
   }
 
   return (
